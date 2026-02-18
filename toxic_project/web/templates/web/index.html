@@ -19,7 +19,7 @@
                     
                     <li class="nav-item">
                         <a href="{% url 'login' %}" class="nav-link btn-login" data-i18n="nav_login">
-                            <i class="fa-brands fa-discord"></i> Ingresar
+                            Ingresar
                         </a>
                     </li>
                     
@@ -100,9 +100,6 @@
             <p class="section-subtitle" data-i18n="rotation_subtitle">Además de desarrollar, competimos y nos divertimos en:</p>
 
             <div class="cards-grid">
-                <div class="card game-card ashes-bg">
-                    <div class="game-content"><h3>Ashes of Creation</h3><span data-i18n="game_waiting">Esperando Lanzamiento</span></div>
-                </div>
                 <div class="card game-card cs2-bg">
                     <div class="game-content"><h3>Counter Strike 2</h3><span data-i18n="game_comp">Competitivo</span></div>
                 </div>
@@ -121,28 +118,42 @@
 
     <section id="eventos" class="about">
         <div class="container">
-            <h2 data-i18n="projects_title">Nuestros Proyectos</h2>
+            <h2 data-i18n="projects_title">Nuestros Proyectos y Actualidad</h2>
             
             <div class="cards-grid">
                 <div class="card l2-project">
                     <h3 data-i18n="proj_l2_title">⚔️ Próximamente: Lineage 2</h3>
-                    <p data-i18n="proj_l2_desc">Estamos desarrollando nuestro propio servidor <strong>Crónica High Five (H5)</strong>.</p>
-                    <ul class="specs-list">
-                        <li data-i18n="proj_l2_feat1">🔹 Files Java PTS (Mecánicas retail)</li>
-                        <li data-i18n="proj_l2_feat2">🔹 Estabilidad garantizada</li>
-                        <li data-i18n="proj_l2_feat3">🔹 Comunidad competitiva</li>
-                    </ul>
-                    <div class="status-badge" data-i18n="proj_l2_status">🛠️ En construcción</div>
+                    <p data-i18n="proj_l2_desc">Estamos desarrollando nuestro propio servidor Crónica High Five (H5) con mecánicas retail.</p>
+                    
+                    <div class="specs-container">
+                        <ul class="specs-list">
+                            <li data-i18n="proj_l2_feat1">🔹 Files Java PTS</li>
+                            <li data-i18n="proj_l2_feat2">🔹 Estabilidad garantizada</li>
+                            <li data-i18n="proj_l2_feat3">🔹 Comunidad competitiva</li>
+                        </ul>
+                    </div>
+
+                    <div class="status-badge" style="background: rgba(219, 167, 24, 0.2); color: #dba718; border: 1px solid #dba718;">
+                        <span data-i18n="proj_l2_status">🛠️ En construcción</span>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3 data-i18n="proj_tourney_title">🏆 Torneos Semanales</h3>
-                    <p data-i18n="proj_tourney_desc">Organizamos copas todos los fines de semana con premios exclusivos para la comunidad.</p>
-                </div>
-
-                <div class="card">
-                    <h3 data-i18n="proj_giveaway_title">📢 Sorteos y Eventos</h3>
-                    <p data-i18n="proj_giveaway_desc">Participa en sorteos mensuales de items, cuentas premium y merchandising oficial.</p>
+                <div class="card scrydex-project">
+                    <h3 data-i18n="proj_scrydex_title">🔥 Actualmente: ScrydeX</h3>
+                    <p data-i18n="proj_scrydex_desc">El clan está activo y compitiendo en el servidor de ScrydeX con gran presencia diaria.</p>
+                    <p style="color: #ccc; font-size: 0.95rem; margin-top: 10px;" data-i18n="proj_scrydex_sub">
+                        Si buscas un clan organizado para cualquier contenido del juego, este es tu lugar. ¡Súmate a la familia!
+                    </p>
+                    
+                    <div class="project-footer" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                        <span style="background: rgba(88, 101, 242, 0.2); color: #5865F2; padding: 5px 12px; border-radius: 4px; font-weight: bold; border: 1px solid #5865F2; font-size: 0.85rem;" data-i18n="proj_scrydex_recruiting">
+                            ✅ Reclutando
+                        </span>
+                        
+                        <a href="https://scryde.net/" target="_blank" class="btn-scryde-web">
+                            <span data-i18n="proj_scrydex_web">Sitio Web Oficial</span> <i class="fa-solid fa-external-link-alt"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

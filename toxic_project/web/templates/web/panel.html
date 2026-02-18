@@ -5,17 +5,6 @@
 
 {% block body_class %}modo-panel{% endblock %}
 
-{% block extra_css %}
-<style>
-    body.modo-panel {
-        background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url("{% static 'web/assets/images (2).jpg' %}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
     <header>
         <div class="container nav-container">
@@ -41,8 +30,9 @@
         <div class="container">
             
             {% if error %}
-                <div style="background: #ff3333; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
-                    <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+                <div class="alert-box alert-error">
+                    <div class="alert-icon-wrapper"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="alert-content">{{ error }}</div>
                 </div>
             {% else %}
             
@@ -52,7 +42,6 @@
                         
                         <div class="profile-info">
                             <h2><span data-i18n="panel_welcome">Bienvenido</span>, <span class="username">{{ perfil.usuario.username }}</span></h2>
-                            
                             <p class="rank"><span data-i18n="panel_rank">Rango</span>: <span class="rank-badge">{{ perfil.rango }}</span></p>
                         </div>
                     </div>
