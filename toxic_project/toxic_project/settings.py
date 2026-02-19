@@ -99,11 +99,6 @@ SOCIALACCOUNT_PROVIDERS = {
     'discord': {
         # Queremos pedirle el email y que nos confirme quién es
         'SCOPE': ['identify', 'email'],
-        'APP': {
-            'client_id': os.getenv('DISCORD_CLIENT_ID'),
-            'secret': os.getenv('DISCORD_SECRET'),
-            'key': ''
-        }
     }
 }
 
