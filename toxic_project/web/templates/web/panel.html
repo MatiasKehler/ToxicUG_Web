@@ -8,7 +8,7 @@
 {% block content %}
     <header>
         <div class="container nav-container">
-            <a href="{% url 'index' %}" class="logo">
+            <a href="{% url 'panel' %}" class="logo">
                 <img src="{% static 'web/assets/img_Icon_1.png' %}" alt="Logo" class="logo-icon">
                 Toxic Panel
             </a>
@@ -38,7 +38,11 @@
             
                 <div class="user-profile-box">
                     <div class="profile-header">
-                        <img src="{% static 'web/assets/avatar_waden.jpg' %}" alt="User Avatar" class="discord-avatar">
+                        {% if perfil.avatar_url %}
+                            <img src="{{ perfil.avatar_url }}" alt="Avatar" class="discord-avatar">
+                        {% else %}
+                            <img src="{% static 'web/assets/img_Icon_1.png' %}" alt="Avatar por defecto" class="discord-avatar" style="background: #111;">
+                        {% endif %}
                         
                         <div class="profile-info">
                             <h2><span data-i18n="panel_welcome">Bienvenido</span>, <span class="username">{{ perfil.usuario.username }}</span></h2>

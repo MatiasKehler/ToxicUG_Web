@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from allauth.account.signals import user_signed_up
 
 # --- 1. PERFIL DEL JUGADOR ---
 class Perfil(models.Model):
@@ -56,3 +57,31 @@ def restar_puntos_al_borrar(sender, instance, **kwargs):
     perfil = instance.perfil
     perfil.dkp_actuales -= instance.cantidad
     perfil.save()
+
+@receiver(post_save, sender=User)
+def asegurar_perfil(sender, instance, created, **kwargs):
+    """Garantiza que TODO usuario tenga un perfil básico, sin importar cómo se cree."""
+    if created:
+        Perfil.objects.get_or_create(usuario=instance)
+
+@receiver(user_signed_up)
+def capturar_datos_discord(request, user, **kwargs):
+    """Captura el avatar y el ID de Discord al registrarse por primera vez."""
+    perfil, _ = Perfil.objects.get_or_create(usuario=user)
+    
+    if 'sociallogin' in kwargs:
+        sociallogin = kwargs['sociallogin']
+        
+        # Verificamos que el login venga de Discord
+        if sociallogin.account.provider == 'discord':
+            extra_data = sociallogin.account.extra_data
+            
+            # Guardamos el ID de Discord
+            perfil.discord_id = sociallogin.account.uid
+            
+            # Armamos la URL oficial del avatar de Discord
+            avatar_hash = extra_data.get('avatar')
+            if avatar_hash:
+                perfil.avatar_url = f"https://cdn.discordapp.com/avatars/{perfil.discord_id}/{avatar_hash}.png"
+            
+            perfil.save()

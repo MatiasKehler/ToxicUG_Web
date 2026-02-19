@@ -1,5 +1,6 @@
 {% extends 'web/base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Acceso Restringido | ToxicUG{% endblock %}
 
@@ -16,16 +17,20 @@
             
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert-box {% if message.tags == 'error' %}alert-error{% else %}alert-warning{% endif %}">
-                        <div class="alert-icon-wrapper">
-                            {% if message.tags == 'error' %}
-                                <i class="fa-solid fa-lock"></i> {% else %}
-                                <i class="fa-solid fa-triangle-exclamation"></i> {% endif %}
+                    {% if message.tags == 'error' or message.tags == 'warning' %}
+                        <div class="alert-box {% if message.tags == 'error' %}alert-error{% else %}alert-warning{% endif %}">
+                            <div class="alert-icon-wrapper">
+                                {% if message.tags == 'error' %}
+                                    <i class="fa-solid fa-lock"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                {% endif %}
+                            </div>
+                            <div class="alert-content">
+                                {{ message }}
+                            </div>
                         </div>
-                        <div class="alert-content">
-                            {{ message }}
-                        </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
@@ -33,7 +38,7 @@
                 <label data-i18n="login_user_label">USUARIO</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-user input-icon"></i> 
-                    <input type="text" name="username" class="form-control has-icon-left" placeholder="Tu usuario..." data-i18n="login_user_ph" required autofocus>
+                    <input type="text" name="username" class="form-control has-icon-left" placeholder="Usuario" value="{{ request.POST.username|default:'' }}" data-i18n="login_user_ph" required autofocus>
                 </div>
             </div>
 
@@ -56,9 +61,16 @@
             <span>O</span>
         </div>
 
-        <a href="#" class="btn-discord-login" data-i18n="login_discord_btn">
-            <i class="fa-brands fa-discord"></i> Ingresar con Discord
-        </a>
+        {% if is_blocked %}
+            <button class="btn-discord-login" style="background: #333; color: #666; cursor: not-allowed; border-color: #444; opacity: 0.6;" disabled>
+                <i class="fa-solid fa-ban"></i> Bloqueado Temporalmente
+            </button>
+        {% else %}
+            <a href="{% provider_login_url 'discord' %}" class="btn-discord-login" data-i18n="login_discord_btn">
+                <i class="fa-brands fa-discord"></i> Ingresar con Discord
+            </a>
+        {% endif %}
+
         <a href="{% url 'index' %}" class="back-link">
             <i class="fa-solid fa-arrow-left"></i> <span data-i18n="login_back">Volver a la portada</span>
         </a>

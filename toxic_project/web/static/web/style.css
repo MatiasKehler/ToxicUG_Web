@@ -150,6 +150,32 @@ header.scrolled { padding: 0.5rem 0; box-shadow: 0 8px 25px rgba(0, 0, 0, 1); }
 .hamburger { display: none; cursor: pointer; z-index: 1001; }
 .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: white; transition: 0.3s; }
 
+/* --- Botones Especiales del Panel (Admin / Salir) --- */
+.nav-link.btn-admin {
+    border: 1px solid #ffcc00; color: #ffcc00 !important; 
+    padding: 5px 15px; border-radius: var(--radius-sm); margin-right: 15px; 
+    transition: var(--transition-fast); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;
+}
+.nav-link.btn-admin:hover { 
+    background: #ffcc00; color: #000 !important; 
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4); transform: translateY(-2px); 
+}
+
+.nav-link.btn-logout {
+    border: 1px solid #ff4444; color: #ff4444 !important; 
+    padding: 5px 15px; border-radius: var(--radius-sm); transition: var(--transition-fast); 
+    font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;
+}
+.nav-link.btn-logout:hover { 
+    background: #ff4444; color: white !important; 
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); transform: translateY(-2px); 
+}
+
+.nav-link.btn-admin::after,
+.nav-link.btn-logout::after {
+    display: none !important;
+}
+
 /* ==========================================================================
    5. SECCIONES (Hero, About, Footer)
    ========================================================================== */
@@ -246,7 +272,7 @@ footer { background-color: #000; color: #777; text-align: center; padding: 30px 
    7. LOGIN SCREEN (Modo Login)
    ========================================================================== */
 body.modo-login {
-    height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center;
+    height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 0 !important; margin: 0 !important;
 }
 
 .login-container {
@@ -286,6 +312,23 @@ body.modo-login {
 .modo-login .form-control:focus { border-color: var(--color-primary); box-shadow: 0 0 15px rgba(51, 255, 0, 0.15); background: #0f0f0f; }
 .form-control:focus + .input-icon { color: var(--color-primary); filter: drop-shadow(0 0 2px var(--color-primary)); }
 
+/* --- FIX AUTOCOMPLETADO BLANCO (Navegadores) --- */
+.modo-login .form-control:-webkit-autofill,
+.modo-login .form-control:-webkit-autofill:hover, 
+.modo-login .form-control:-webkit-autofill:focus, 
+.modo-login .form-control:-webkit-autofill:active {
+    /* 1. Sombra interna para tapar el fondo blanco */
+    -webkit-box-shadow: 0 0 0 30px var(--bg-input) inset !important;
+    box-shadow: 0 0 0 30px var(--bg-input) inset !important; /* Estándar para quitar el warning */
+    
+    /* 2. Forzamos el color del texto a blanco */
+    -webkit-text-fill-color: white !important;
+    color: white !important; /* Estándar */
+    
+    /* 3. Evita parpadeos */
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Botón Login Principal */
 .modo-login .btn-login {
     background: #111; color: var(--color-primary); font-weight: 800; border: 2px solid var(--color-primary);
@@ -297,6 +340,7 @@ body.modo-login {
     background: var(--color-primary); color: #000;
     box-shadow: 0 0 25px rgba(51, 255, 0, 0.3); transform: translateY(-2px);
 }
+
 .btn-login i { font-size: 1.2rem; transition: 0.3s; }
 .btn-login:hover i { transform: translateX(5px); }
 

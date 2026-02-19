@@ -21,6 +21,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # --- ALLAUTH (Para Discord) ---
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.discord',
     
     # Mis Apps
     'web',
@@ -34,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'toxic_project.urls'
@@ -71,6 +79,29 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# --- CONFIGURACIÓN DE ALLAUTH ---
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # Login normal
+    'allauth.account.auth_backends.AuthenticationBackend', # Login Social
+]
+
+# Redirecciones
+LOGIN_REDIRECT_URL = 'panel'   # A dónde va al iniciar sesión con éxito
+LOGOUT_REDIRECT_URL = 'index'  # A dónde va al cerrar sesión
+ACCOUNT_LOGOUT_ON_GET = True   # Cierra sesión directo sin preguntar "¿Estás seguro?"
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_MESSAGES = False
+
+# Opciones de Discord Allauth
+SOCIALACCOUNT_PROVIDERS = {
+    'discord': {
+        # Queremos pedirle el email y que nos confirme quién es
+        'SCOPE': ['identify', 'email'],
+    }
+}
+
 # --- IDIOMA Y ZONA HORARIA ---
 LANGUAGE_CODE = 'es-ar'
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
@@ -83,5 +114,3 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # --- REDIRECCIONES Y LOGIN ---
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'panel'
-LOGOUT_REDIRECT_URL = 'index'

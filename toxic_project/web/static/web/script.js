@@ -1,8 +1,3 @@
-/**
- * Toxic Under Groove - Main Script
- * Version: 2.0 (Refactored)
- */
-
  document.addEventListener('DOMContentLoaded', () => {
     initUI();
     initTranslations();
@@ -40,7 +35,7 @@ function initUI() {
 // --- 2. SISTEMA DE TRADUCCIÓN (I18N) ---
 const translations = {
     es: {
-        nav_home: "Inicio", nav_about: "Nosotros", nav_events: "Eventos", nav_login: "Ingresar",
+        nav_home: "Inicio", nav_about: "Nosotros", nav_events: "Eventos", nav_login: "Panel",
         hero_title: "¡Sé parte de nuestra comunidad!", hero_btn: "Unirme al Discord",
         origin_title: "El Origen de Toxic Under Groove",
         origin_text: "Todo comenzó con un grupo de amigos cansados de la monotonía. Lo que empezó como unas simples partidas nocturnas se transformó en una hermandad. Hoy somos una comunidad consolidada buscando crear un espacio donde la competitividad y la diversión van de la mano.",
@@ -62,14 +57,14 @@ const translations = {
         footer_copy: "© 2026 Toxic Under Groove. Todos los derechos reservados.",
         
         // LOGIN & PANEL
-        login_title: "ACCESO", login_user_label: "USUARIO", login_user_ph: "Tu usuario...", login_pass_label: "CONTRASEÑA", login_pass_ph: "••••••",
+        login_title: "ACCESO", login_user_label: "USUARIO", login_user_ph: "Usuario", login_pass_label: "CONTRASEÑA", login_pass_ph: "Contraseña",
         login_btn: "INGRESAR", login_back: "Volver a la portada", login_discord_btn: "Ingresar con Discord",
         panel_welcome: "Bienvenido", panel_rank: "Rango", panel_dkp: "Mis DKP", panel_avail: "Puntos disponibles", panel_att: "Asistencia", panel_evts: "Eventos",
         panel_hist_title: "Historial de Puntos", panel_th_date: "Fecha", panel_th_evt: "Evento", panel_th_pts: "Puntos", panel_no_activity: "Aún no tienes actividad registrada.",
         panel_admin: "Gestión (Admin)", panel_logout: "Salir"
     },
     en: {
-        nav_home: "Home", nav_about: "About Us", nav_events: "Events", nav_login: "Login",
+        nav_home: "Home", nav_about: "About Us", nav_events: "Events", nav_login: "Panel",
         hero_title: "Be part of our community!", hero_btn: "Join Discord",
         origin_title: "The Origin of Toxic Under Groove",
         origin_text: "It all started with a group of friends tired of monotony. What began as simple late-night games transformed into a brotherhood. Today we are a consolidated community looking to create a space where competitiveness and fun go hand in hand.",
@@ -91,7 +86,7 @@ const translations = {
         footer_copy: "© 2026 Toxic Under Groove. All rights reserved.",
 
         // LOGIN & PANEL
-        login_title: "LOGIN", login_user_label: "USERNAME", login_user_ph: "Your username...", login_pass_label: "PASSWORD", login_pass_ph: "••••••",
+        login_title: "LOGIN", login_user_label: "USERNAME", login_user_ph: "Username", login_pass_label: "PASSWORD", login_pass_ph: "Password",
         login_btn: "ENTER", login_back: "Back to home", login_discord_btn: "Login with Discord",
         panel_welcome: "Welcome", panel_rank: "Rank", panel_dkp: "My DKP", panel_avail: "Points available", panel_att: "Attendance", panel_evts: "Events",
         panel_hist_title: "Points History", panel_th_date: "Date", panel_th_evt: "Event", panel_th_pts: "Points", panel_no_activity: "No activity registered yet.",

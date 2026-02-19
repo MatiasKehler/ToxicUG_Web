@@ -13,9 +13,10 @@ from .models import Perfil, HistorialDKP
 
 class CustomLoginView(LoginView):
     """
-    Vista de Login personalizada con seguridad anti-bruteforce.
+    Vista de Login personalizada con seguridad anti-bruteforce y bloqueo de Discord.
     """
     template_name = 'web/login.html'
+    redirect_authenticated_user = True
 
     def dispatch(self, request, *args, **kwargs):
         # A. VERIFICAR SI ESTÁ BLOQUEADO POR TIEMPO
@@ -25,9 +26,12 @@ class CustomLoginView(LoginView):
             blocked_until = timezone.datetime.fromisoformat(blocked_time_str)
             if timezone.now() < blocked_until:
                 remaining_minutes = int((blocked_until - timezone.now()).total_seconds() / 60) + 1
-                # SIN EMOJI AQUÍ (Lo pone el HTML)
                 messages.error(request, f"Sistema bloqueado por seguridad. Espera {remaining_minutes} minutos.")
-                return render(request, self.template_name, {'form': self.get_form()})
+                # MAGIA SENIOR: Retornamos la vista avisando que está bloqueado
+                return render(request, self.template_name, {
+                    'form': self.get_form(),
+                    'is_blocked': True  # <-- Enviamos esta señal al HTML
+                })
             else:
                 self._reset_login_attempts(request)
 
@@ -46,6 +50,11 @@ class CustomLoginView(LoginView):
             block_time = timezone.now() + timedelta(minutes=5)
             self.request.session['login_blocked_until'] = block_time.isoformat()
             messages.error(self.request, "Has excedido los 3 intentos. Acceso bloqueado por 5 minutos.")
+            # MAGIA SENIOR: Bloqueamos inmediatamente en el 3er intento fallido
+            return render(self.request, self.template_name, {
+                'form': form,
+                'is_blocked': True  # <-- Enviamos esta señal al HTML
+            })
         else:
             # CASO: ADVERTENCIA
             msg_text = f"Te queda 1 intento." if remaining == 1 else f"Te quedan {remaining} intentos."
