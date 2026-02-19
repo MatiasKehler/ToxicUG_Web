@@ -26,7 +26,7 @@ class CustomLoginView(LoginView):
             blocked_until = timezone.datetime.fromisoformat(blocked_time_str)
             if timezone.now() < blocked_until:
                 remaining_minutes = int((blocked_until - timezone.now()).total_seconds() / 60) + 1
-                messages.error(request, f"Sistema bloqueado por seguridad. Espera {remaining_minutes} minutos.")
+                messages.error(request, f"LOCKED|{remaining_minutes}")
                 # MAGIA SENIOR: Retornamos la vista avisando que está bloqueado
                 return render(request, self.template_name, {
                     'form': self.get_form(),
@@ -49,7 +49,7 @@ class CustomLoginView(LoginView):
             # CASO: BLOQUEO
             block_time = timezone.now() + timedelta(minutes=5)
             self.request.session['login_blocked_until'] = block_time.isoformat()
-            messages.error(self.request, "Has excedido los 3 intentos. Acceso bloqueado por 5 minutos.")
+            messages.error(self.request, "MAX_ATTEMPTS|5")
             # MAGIA SENIOR: Bloqueamos inmediatamente en el 3er intento fallido
             return render(self.request, self.template_name, {
                 'form': form,
@@ -58,7 +58,7 @@ class CustomLoginView(LoginView):
         else:
             # CASO: ADVERTENCIA
             msg_text = f"Te queda 1 intento." if remaining == 1 else f"Te quedan {remaining} intentos."
-            messages.warning(self.request, f"Credenciales incorrectas. {msg_text}")
+            messages.warning(self.request, f"WARNING|{remaining}")
 
         return super().form_invalid(form)
 

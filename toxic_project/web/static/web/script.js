@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     initUI();
     initTranslations();
     initPasswordToggle();
@@ -128,6 +128,38 @@ window.setLanguage = function(lang, element) {
         flag.classList.remove('active');
         if(flag.getAttribute('onclick') && flag.getAttribute('onclick').includes(lang)) {
             flag.classList.add('active');
+        }
+    });
+
+    // 3. Traducir mensajes dinámicos del Backend (Errores de Login)
+    document.querySelectorAll('.js-dynamic-msg').forEach(el => {
+        const raw = el.getAttribute('data-raw');
+        
+        // Verificamos si es un código enviado desde Python
+        if (raw && raw.includes('|')) {
+            const parts = raw.split('|');
+            const code = parts[0];
+            const val = parts[1];
+
+            if (code === 'LOCKED') {
+                el.textContent = lang === 'en' 
+                    ? `System locked for security. Wait ${val} minutes.` 
+                    : `Sistema bloqueado por seguridad. Espera ${val} minutos.`;
+            } 
+            else if (code === 'MAX_ATTEMPTS') {
+                el.textContent = lang === 'en' 
+                    ? `Maximum attempts exceeded. Access blocked for ${val} minutes.` 
+                    : `Has excedido los 3 intentos. Acceso bloqueado por ${val} minutos.`;
+            } 
+            else if (code === 'WARNING') {
+                if (lang === 'en') {
+                    const attemptWord = val == 1 ? 'attempt' : 'attempts';
+                    el.textContent = `Invalid credentials. You have ${val} ${attemptWord} left.`;
+                } else {
+                    const attemptWord = val == 1 ? 'Te queda 1 intento.' : `Te quedan ${val} intentos.`;
+                    el.textContent = `Credenciales incorrectas. ${attemptWord}`;
+                }
+            }
         }
     });
 };
