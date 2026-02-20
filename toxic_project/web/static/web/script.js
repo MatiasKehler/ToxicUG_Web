@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initUI();
     initTranslations();
     initPasswordToggle();
+    initLiveEvents();
 });
 
 // --- 1. LÓGICA DE INTERFAZ (UI) ---
@@ -178,4 +179,139 @@ function initPasswordToggle() {
             this.classList.toggle('fa-eye-slash');
         });
     }
+}
+
+// --- 4. SISTEMA DE EVENTOS EN VIVO (HORARIO ARGENTINA) ---
+
+function getARTTime() {
+    // Convierte el reloj de cualquier usuario al horario estricto de Argentina (UTC-3)
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    return new Date(utc - (3 * 3600000));
+}
+
+function initLiveEvents() {
+    const container = document.getElementById('liveEventsContainer');
+    if (!container) return;
+
+    // Base de datos de eventos (Configurado exactamente como pediste)
+    // "duration" es cuánto tiempo en minutos dura el evento para decir "EN VIVO"
+    // "days" representa los días de la semana: 0=Domingo, 1=Lunes, 2=Martes, etc.
+    const categories = [
+        {
+            id: 'daily', title: 'Eventos Diarios', icon: 'fa-flag',
+            schedule: [
+                { name: 'TvT', hour: 1, min: 0, duration: 10, days: [0,1,2,3,4,5,6] },
+                { name: 'TvT', hour: 9, min: 0, duration: 10, days: [0,1,2,3,4,5,6] },
+                { name: 'CTF', hour: 12, min: 0, duration: 10, days: [0,1,2,3,4,5,6] },
+                { name: 'TvT', hour: 13, min: 0, duration: 10, days: [0,1,2,3,4,5,6] },
+                { name: 'CTF', hour: 15, min: 0, duration: 10, days: [0,1,2,3,4,5,6] },
+                { name: 'TvT', hour: 16, min: 0, duration: 10, days: [0,1,2,3,4,5,6] }
+            ]
+        },
+        {
+            id: 'oly', title: 'Olimpiadas 3v3', icon: 'fa-shield-halved',
+            schedule: [
+                { name: 'Olimpiadas', hour: 8, min: 0, duration: 480, days: [0, 4] }, // Dom(0) y Jue(4) - 8hs de duración
+                { name: 'Olimpiadas', hour: 12, min: 0, duration: 360, days: [5, 6] } // Vie(5) y Sab(6) - 6hs de duración
+            ]
+        },
+        {
+            id: 'raid', title: 'Raid Bosses', icon: 'fa-skull',
+            schedule: [
+                { name: 'Raid Boss', hour: 8, min: 0, duration: 15, days: [0,1,2,3,4,5,6] },
+                { name: 'Raid Boss', hour: 14, min: 0, duration: 15, days: [0,1,2,3,4,5,6] }
+            ]
+        }
+    ];
+
+    // Inyectamos el esqueleto HTML de las 3 tarjetas
+    container.innerHTML = categories.map(cat => `
+        <div class="event-card" id="cat-${cat.id}">
+            <div class="event-header">
+                <span class="event-title"><i class="fa-solid ${cat.icon}"></i> ${cat.title}</span>
+                <span class="event-time" id="name-${cat.id}">Buscando...</span>
+            </div>
+            <div class="event-countdown" id="timer-${cat.id}">--h --m --s</div>
+        </div>
+    `).join('');
+
+    // Función matemática para encontrar el próximo evento de la lista
+    function getNextEvent(schedule, nowART) {
+        let bestTimeDiff = Infinity;
+        let bestEvent = null;
+        let eventStart = null;
+
+        // Buscamos desde hoy hasta 7 días en el futuro
+        for (let dayOffset = 0; dayOffset <= 7; dayOffset++) {
+            let checkDate = new Date(nowART.getTime());
+            checkDate.setDate(checkDate.getDate() + dayOffset);
+            let currentDayOfWeek = checkDate.getDay();
+
+            for (let ev of schedule) {
+                if (ev.days.includes(currentDayOfWeek)) {
+                    let evStart = new Date(checkDate.getTime());
+                    evStart.setHours(ev.hour, ev.min, 0, 0);
+                    let evEnd = new Date(evStart.getTime() + (ev.duration * 60000));
+
+                    // ¿Está en vivo en este exacto momento?
+                    if (dayOffset === 0 && nowART >= evStart && nowART < evEnd) {
+                        return { live: true, name: ev.name };
+                    }
+
+                    // ¿Es en el futuro? Comparamos para quedarnos con el más cercano
+                    if (evStart > nowART) {
+                        let diff = evStart.getTime() - nowART.getTime();
+                        if (diff < bestTimeDiff) {
+                            bestTimeDiff = diff;
+                            bestEvent = ev;
+                            eventStart = evStart;
+                        }
+                    }
+                }
+            }
+            // Si ya encontramos el evento más cercano en este día, dejamos de buscar en el futuro
+            if (bestEvent) break; 
+        }
+        return { live: false, name: bestEvent.name, start: eventStart };
+    }
+
+    // Bucle principal: Actualiza los relojes cada 1 segundo (1000ms)
+    setInterval(() => {
+        const nowART = getARTTime();
+        
+        categories.forEach(cat => {
+            const nextEv = getNextEvent(cat.schedule, nowART);
+            const elCard = document.getElementById(`cat-${cat.id}`);
+            const elName = document.getElementById(`name-${cat.id}`);
+            const elTimer = document.getElementById(`timer-${cat.id}`);
+
+            if (nextEv.live) {
+                if(!elCard.classList.contains('live-now')) elCard.classList.add('live-now');
+                elName.innerHTML = `<i class="fa-solid fa-circle-play"></i> ${nextEv.name}`;
+                elTimer.innerHTML = '¡EN VIVO! 🔥';
+            } else {
+                elCard.classList.remove('live-now');
+                const diff = nextEv.start.getTime() - nowART.getTime();
+                
+                // Calculamos días, horas, minutos y segundos restantes
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                // Si falta más de 1 día, mostramos "Xd", sino solo horas
+                let timeStr = d > 0 
+                    ? `${d}d ${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`
+                    : `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
+                
+                // Formato de hora (ej: 09:00hs)
+                let hourStr = nextEv.start.getHours().toString().padStart(2, '0');
+                let minStr = nextEv.start.getMinutes().toString().padStart(2, '0');
+                
+                elName.innerHTML = `<i class="fa-regular fa-clock"></i> ${nextEv.name} (${hourStr}:${minStr}hs)`;
+                elTimer.innerHTML = timeStr;
+            }
+        });
+    }, 1000);
 }

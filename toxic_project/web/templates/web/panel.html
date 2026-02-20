@@ -36,38 +36,49 @@
                 </div>
             {% else %}
             
-                <div class="user-profile-box">
-                    <div class="profile-header">
+                <div class="dashboard-header-box">
+                    
+                    <div class="profile-info-section">
                         {% if perfil.avatar_url %}
                             <img src="{{ perfil.avatar_url }}" alt="Avatar" class="discord-avatar">
                         {% else %}
                             <img src="{% static 'web/assets/img_Icon_1.png' %}" alt="Avatar por defecto" class="discord-avatar" style="background: #111;">
                         {% endif %}
                         
-                        <div class="profile-info">
+                        <div class="profile-text">
                             <h2><span data-i18n="panel_welcome">Bienvenido</span>, <span class="username">{{ perfil.usuario.username }}</span></h2>
                             <p class="rank"><span data-i18n="panel_rank">Rango</span>: <span class="rank-badge">{{ perfil.rango }}</span></p>
                         </div>
                     </div>
-                </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card dkp-card">
-                        <div class="icon-stat"><i class="fa-solid fa-dragon"></i></div>
-                        <h3 data-i18n="panel_dkp">Mis DKP</h3>
-                        <p class="number">{{ perfil.dkp_actuales }}</p>
-                        <span class="subtext" data-i18n="panel_avail">Puntos disponibles</span>
+                    <div class="profile-stats-section">
+                        <div class="mini-stat dkp-stat">
+                            <i class="fa-solid fa-dragon"></i>
+                            <div class="stat-details">
+                                <span class="stat-value">{{ perfil.dkp_actuales }}</span>
+                                <span class="stat-label" data-i18n="panel_dkp">Mis DKP</span>
+                            </div>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <div class="stat-details">
+                                <span class="stat-value">{{ perfil.asistencia_porcentaje }}%</span>
+                                <span class="stat-label" data-i18n="panel_att">Asistencia</span>
+                            </div>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <div class="stat-details">
+                                <span class="stat-value">{{ perfil.eventos_participados }}</span>
+                                <span class="stat-label" data-i18n="panel_evts">Eventos</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="icon-stat"><i class="fa-solid fa-chart-line"></i></div>
-                        <h3 data-i18n="panel_att">Asistencia</h3>
-                        <p class="number">{{ perfil.asistencia_porcentaje }}%</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon-stat"><i class="fa-solid fa-calendar-check"></i></div>
-                        <h3 data-i18n="panel_evts">Eventos</h3>
-                        <p class="number">{{ perfil.eventos_participados }}</p>
-                    </div>
+
+                </div>
+                <div class="events-grid-box">
+                    <h3 data-i18n="panel_events_title">Cronograma del Servidor</h3>
+                    <div class="live-events-container" id="liveEventsContainer"></div>
                 </div>
 
                 <div class="history-table-box">
