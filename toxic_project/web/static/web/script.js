@@ -218,7 +218,7 @@ function initLiveEvents() {
             ]
         },
         {
-            id: 'oly', title_es: 'Olimpiadas 3v3', title_en: '3v3 Olympiads', icon: 'fa-shield-halved',
+            id: 'oly', title_es: 'Olimpiadas', title_en: 'Olympiads', icon: 'fa-shield-halved',
             schedule: [
                 { name: 'Olimpiadas', hour: 8, min: 0, duration: 480, days: [0, 4] },
                 { name: 'Olimpiadas', hour: 12, min: 0, duration: 360, days: [5, 6] }
