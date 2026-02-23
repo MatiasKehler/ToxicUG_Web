@@ -27,35 +27,33 @@ def aplicar_multa(modeladmin, request, queryset):
         count += 1
     modeladmin.message_user(request, f"Se aplicó la multa a {count} jugadores.")
 
-@admin.register(Perfil)
-class PerfilAdmin(admin.ModelAdmin):
-    # Columnas que verás en la tabla principal
-    list_display = ('usuario', 'rango', 'dkp_actuales', 'aprobado')
-    
-    # Filtros laterales para buscar rápido a los "No Aprobados"
-    list_filter = ('aprobado', 'rango')
-    
-    # ¡La magia! Te permite marcar el check de aprobado sin tener que entrar al perfil
-    list_editable = ('aprobado',)
-    
-    # Barra de búsqueda para buscar por nombre de usuario de Discord
-    search_fields = ('usuario__username',)
 
 # --- CONFIGURACIÓN DE TABLAS ---
 
+@admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'rango', 'dkp_actuales', 'asistencia_porcentaje')
+    # Columnas que verás en la tabla principal (fusionadas)
+    list_display = ('usuario', 'rango', 'dkp_actuales', 'asistencia_porcentaje', 'aprobado')
+    
+    # Filtros laterales para buscar rápido
+    list_filter = ('aprobado', 'rango', 'asistencia_porcentaje')
+    
+    # Checkbox editable directo desde la tabla
+    list_editable = ('aprobado',)
+    
+    # Barra de búsqueda
     search_fields = ('usuario__username', 'discord_id')
-    list_filter = ('rango', 'asistencia_porcentaje')
+    
+    # Acciones masivas de DKP
     actions = [dar_bonus_raid, aplicar_multa]
-    list_per_page = 20 # Paginación para que no sea una lista infinita
+    
+    # Paginación
+    list_per_page = 20
 
+
+@admin.register(HistorialDKP)
 class HistorialAdmin(admin.ModelAdmin):
     list_display = ('fecha', 'perfil', 'evento', 'cantidad')
     list_filter = ('fecha', 'evento')
     search_fields = ('perfil__usuario__username', 'evento')
     date_hierarchy = 'fecha' # Agrega una barra de navegación por fechas arriba
-
-# --- REGISTRO ---
-admin.site.register(Perfil, PerfilAdmin)
-admin.site.register(HistorialDKP, HistorialAdmin)
