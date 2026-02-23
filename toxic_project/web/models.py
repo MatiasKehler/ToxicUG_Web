@@ -18,6 +18,9 @@ class Perfil(models.Model):
     asistencia_porcentaje = models.IntegerField(default=0, verbose_name="% Asistencia")
     eventos_participados = models.IntegerField(default=0, verbose_name="Raids Totales")
 
+    # Campo de validación
+    aprobado = models.BooleanField(default=False, verbose_name="Aprobado por Staff")
+
     class Meta:
         verbose_name = "Perfil de Jugador"
         verbose_name_plural = "Perfiles de Jugadores"

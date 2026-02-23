@@ -82,12 +82,21 @@ def index(request):
 @login_required
 def panel(request):
     context = {}
+    
     try:
         perfil_usuario = Perfil.objects.get(usuario=request.user)
-        historial = HistorialDKP.objects.filter(perfil=perfil_usuario).order_by('-fecha')[:10]
-        context = {'perfil': perfil_usuario, 'historial': historial}
     except Perfil.DoesNotExist:
-        context['error'] = 'Tu cuenta no tiene un Perfil de Jugador activo. Contacta a un Administrador.'
+        # MAGIA: Si entra por primera vez con Discord y no tiene perfil, se lo creamos automáticamente (pero desactivado)
+        perfil_usuario = Perfil.objects.create(usuario=request.user)
+
+    # Validamos si está aprobado (Tú, al ser superuser, siempre tendrás acceso)
+    if not perfil_usuario.aprobado and not request.user.is_superuser:
+        context['esperando_aprobacion'] = True
+        return render(request, 'web/panel.html', context)
+        
+    # Si la cuenta está aprobada, cargamos el panel normal
+    historial = HistorialDKP.objects.filter(perfil=perfil_usuario).order_by('-fecha')[:10]
+    context = {'perfil': perfil_usuario, 'historial': historial}
     
     return render(request, 'web/panel.html', context)
 
