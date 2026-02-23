@@ -27,6 +27,20 @@ def aplicar_multa(modeladmin, request, queryset):
         count += 1
     modeladmin.message_user(request, f"Se aplicó la multa a {count} jugadores.")
 
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    # Columnas que verás en la tabla principal
+    list_display = ('usuario', 'rango', 'dkp_actuales', 'aprobado')
+    
+    # Filtros laterales para buscar rápido a los "No Aprobados"
+    list_filter = ('aprobado', 'rango')
+    
+    # ¡La magia! Te permite marcar el check de aprobado sin tener que entrar al perfil
+    list_editable = ('aprobado',)
+    
+    # Barra de búsqueda para buscar por nombre de usuario de Discord
+    search_fields = ('usuario__username',)
+
 # --- CONFIGURACIÓN DE TABLAS ---
 
 class PerfilAdmin(admin.ModelAdmin):
