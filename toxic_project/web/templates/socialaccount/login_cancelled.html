@@ -1,0 +1,30 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block title %}Inicio Cancelado - ToxicUG{% endblock %}
+
+{% block body_class %}modo-panel{% endblock %}
+
+{% block content %}
+    <section class="panel-section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            
+            <div class="history-box" style="text-align: center; max-width: 500px; margin: 0 auto; padding: 40px 20px;">
+                <i class="fa-brands fa-discord" style="font-size: 4rem; color: #ff3333; margin-bottom: 20px;"></i>
+                
+                <h2 style="margin-bottom: 15px;">Autorización Cancelada</h2>
+                
+                <p style="color: #aaa; margin-bottom: 25px; font-size: 1.1rem;">
+                    Has cancelado el inicio de sesión con Discord. No te preocupes, no hemos recibido ni guardado ninguno de tus datos.
+                </p>
+                
+                <div class="divider-small"></div>
+                
+                <a href="/login/" class="btn-primary" style="text-decoration: none; display: inline-block; margin-top: 15px; padding: 10px 25px;">
+                    <i class="fa-solid fa-arrow-left"></i> Volver a intentar
+                </a>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
