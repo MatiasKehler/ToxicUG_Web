@@ -49,7 +49,7 @@ ROOT_URLCONF = 'toxic_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], # Django buscará automáticamente en las carpetas 'templates' de cada app
+        'DIRS': [BASE_DIR / 'web' / 'templates'], # Django buscará automáticamente en las carpetas 'templates' de cada app
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
