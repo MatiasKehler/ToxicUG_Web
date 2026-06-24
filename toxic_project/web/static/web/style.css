@@ -235,6 +235,7 @@ footer { background-color: #000; color: #777; text-align: center; padding: 30px 
 .cs2-bg { background-image: url('assets/img_Cs_2.png'); }
 .dota-bg { background-image: url('assets/img_Dota_2.png'); }
 .fornite-bg { background-image: url('assets/img_Fornite.png'); }
+.aion-bg { background-image: url('assets/img_Aion2.png');}
 
 /* --- Proyectos Específicos (Sin Glow Externo) --- */
 .card.l2-project { border-left: 5px solid var(--color-gold); }
